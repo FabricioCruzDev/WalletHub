@@ -24,6 +24,38 @@ O projeto adota a filosofia **Client-First**, priorizando a experiência e a dis
 * **Driver de Conexão:** Psycopg3 (Binary)
 * **Gerenciamento de Dependências:** pip
 
+## 📂 Estrutura de Pastas: WALLTHUB
+wallethub/
+├── assets/                  # Ícones, imagens e fontes
+│   └── logo.png
+├── core/                    # Configurações globais e segurança
+│   ├── config.py            # Carrega variáveis do .env (dotenv)
+│   └── constants.py         # Cores do app, strings fixas, etc.
+├── database/                # Camada de Persistência
+│   ├── local/
+│   │   ├── sqlite_manager.py # CRUD e criação do banco .db
+│   │   └── schema.sql       # Script de criação das tabelas locais
+│   └── remote/
+│       ├── supabase_client.py # Conexão via Psycopg3/Supabase
+│       └── sync_engine.py    # Lógica de sincronização Local <-> Remoto
+├── models/                  # Definição das Entidades (Classes)
+│   ├── account.py           # Classe Conta
+│   ├── card.py              # Classe Cartão
+│   └── transaction.py       # Classe Transação
+├── views/                   # Telas do Aplicativo (Flet)
+│   ├── common/              # Componentes reutilizáveis (Botões, Cards)
+│   ├── home_view.py         # Dashboard principal
+│   ├── login_view.py        # Tela de autenticação
+│   └── transaction_view.py  # Tela de cadastro de gastos
+├── controllers/             # Regras de Negócio
+│   ├── finance_controller.py # Lógica de cálculo de faturas/saldos
+│   └── auth_controller.py    # Lógica de login e permissões
+├── tests/                   # Testes unitários
+├── .env                     # Credenciais (NÃO ENVIAR AO GITHUB)
+├── .gitignore               # Ignora .env, __pycache__ e o arquivo .db
+├── main.py                  # Ponto de entrada do Flet
+└── requirements.txt         # Dependências do projeto
+
 ## 📥 Instalação e Configuração
 
 ### Pré-requisitos
