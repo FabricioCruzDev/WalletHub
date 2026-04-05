@@ -2,13 +2,19 @@ classDiagram
     class User {
         +int id
         +string name
-        +STRING last_name
+        +string last_name
         +string email
+        +timestamp updated_at
+        +bool synced
+        +bool is_deleted
     }
     class Account {
         +int id
         +string name
         +float balance
+        +timestamp updated_at
+        +bool synced
+        +bool is_deleted
         +updateBalance(amount)
     }
     class CreditCard {
@@ -18,6 +24,9 @@ classDiagram
         +float available_limit
         +int closing_day
         +int due_day
+        +timestamp updated_at
+        +bool synced
+        +bool is_deleted
         +updateLimit(amount)
     }
     class Transaction {
@@ -26,23 +35,35 @@ classDiagram
         +float value
         +datetime date
         +string type (DEBIT/CREDIT)
+        +timestamp updated_at
+        +bool synced
+        +bool is_deleted
     }
     class Category {
         +int id
         +string name
-        +string icon
+        +string operator
+        +timestamp updated_at
+        +bool synced
+        +bool is_deleted
     }
     class FixedExpense {
         +int id
         +string description
         +float value
         +int due_day
+        +timestamp updated_at
+        +bool synced
+        +bool is_deleted
     }
     class Invoice {
         +int id
         +date month_ref
         +float total_value
         +bool is_paid
+        +timestamp updated_at
+        +bool synced
+        +bool is_deleted
     }
 
     User "1" --> "*" Account
