@@ -2,7 +2,7 @@ from typing import Optional
 import datetime
 import uuid
 
-from sqlalchemy import BigInteger, Boolean, Column, DateTime, Double, Numeric, PrimaryKeyConstraint, Table, Text, Uuid, text, func
+from sqlalchemy import BigInteger, Boolean, Column, DateTime, Double, Numeric, PrimaryKeyConstraint, Table, Text, Uuid, text, func, false
 from sqlalchemy.dialects.postgresql import OID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -12,15 +12,12 @@ class Base(DeclarativeBase):
 
 class User(Base):
     __tablename__ = 'tb_user'
-    __table_args__ = (
-        PrimaryKeyConstraint('id', name='tb_user_pkey'),
-    )
+
 
     id: Mapped[uuid.UUID] = mapped_column(
         Uuid, 
         primary_key=True,
-        default=uuid.uuid4, #cado o banco local não saiba gerar
-        server_default=text('gen_random_uuid()')
+        default=uuid.uuid4
         )
     name: Mapped[str] = mapped_column(
         Text,
@@ -32,20 +29,25 @@ class User(Base):
         )
     email: Mapped[str] = mapped_column(
         Text,
-        nullable=False
+        nullable=False,
+        unique=True
         )
     create_at: Mapped[datetime.datetime] = mapped_column(
         DateTime,
-        server_default=text('now()')
+        server_default=func.now()
         )
     updated_at: Mapped[datetime.datetime] = mapped_column(
         DateTime,
-        server_default=text('now()')
+        server_default=func.now(),
+        onupdate=func.now()
         )
     synced: Mapped[bool] = mapped_column(
         Boolean,
-        server_default=text('false')
+        default=False,
+        server_default=false()
         )
     is_deleted: Mapped[bool] = mapped_column(
         Boolean,
-        server_default=text('false'))
+        default=False,
+        server_default=false()
+    )
