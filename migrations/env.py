@@ -5,7 +5,7 @@ from alembic import context
 from dotenv import load_dotenv
 
 # 1. Importa o Base dos seus modelos
-from models.models import Base
+from models.user import Base
 
 target_metadata = Base.metadata
 

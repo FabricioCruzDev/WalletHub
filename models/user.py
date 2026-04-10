@@ -4,13 +4,18 @@ import uuid
 
 from sqlalchemy import BigInteger, Boolean, Column, DateTime, Double, Numeric, PrimaryKeyConstraint, Table, Text, Uuid, text, func, false
 from sqlalchemy.dialects.postgresql import OID
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
 
-class Base(DeclarativeBase):
-    pass
+from database.local_conn import Session, Base
 
 
 class User(Base):
+
+    def __init__(self, name, last_name, email):
+        self.name = name
+        self.last_name = last_name
+        self.email = email
+    
     __tablename__ = 'tb_user'
 
 
@@ -51,3 +56,4 @@ class User(Base):
         default=False,
         server_default=false()
     )
+
