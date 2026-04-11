@@ -1,72 +1,45 @@
 import flet as ft
+from views.user_view import user_view
 
-from models.user import User 
-from repositories.user_repo import create_user, get_all_user, delete_user, get_user
+def main(page: ft.Page):
+    page.title = "Wallet-Hub"
+    page.theme_mode = ft.ThemeMode.LIGHT
 
-
-def main (page: ft.Page):
-    page.title = "Usuários"
-    page.window.width = 400
-    page.window.height = 700
-
-
-    def clear_fields():
-        for f in fields:
-            f.value = ''
-        page.update()
-
-
-    def check (e):
-        fields_value = all([name.value, last_name.value, email.value])
-        btn_adicionar.disabled = not (fields_value)
-        if fields_value:
-            lbl_status.value = "Tudo certo"
-            lbl_status.bgcolor = "blue"
-
-
-        page.update()
-
-
-    def save_user(e):
-        new_user = User(name.value, last_name.value, email.value)
-        try:
-            create_user(new_user)
-            lbl_status.value = f"{new_user.name} adicionado com sucesso"
-            lbl_status.bgcolor = 'green'
-            clear_fields()
-        except:
-            lbl_status.value = 'ERRO'
-            clear_fields()
+    # 1. função de roteamento
+    def route_change(route):
+        print(f"Rota alterada para: {page.route}") # Log para seu terminal
+        page.views.clear()
         
-    
-    lbl_content = ft.Text('Gerenciamento de usuários',
-                    text_align='center',
-                    size=24)
-    
-    #imputs
-    name = ft.TextField(label="Nome", on_change=check)
-    last_name = ft.TextField(label="Sobrenome", on_change=check)
-    email = ft.TextField(label="Email", on_change=check)
-    fields = [name, last_name, email]
-    
-    btn_adicionar = ft.FloatingActionButton(icon=ft.Icons.ADD, on_click=save_user, disabled=False)
+        # VIEW HOME
+        page.views.append(
+            ft.View(
+                route="/",
+                controls=[
+                    ft.AppBar(title=ft.Text("Wallet Hub"), bgcolor="#0D9488"),
+                    ft.Container(
+                        content=ft.Column([
+                            ft.Text("WALLET HUB", size=30, weight="bold"),
+                            ft.ElevatedButton("IR PARA REGISTRO", on_click=lambda _: page.go("/user")),
+                        ], horizontal_alignment=ft.CrossAxisAlignment.CENTER),
+                        padding=50
+                    ),
+                ],
+            )
+        )
 
-    lbl_status = ft.Text("Todos os campos são obrigatórios", bgcolor="red")
+        # VIEW USER
+        if page.route == "/user":
+            try:
+                view_to_add = user_view(page)
+                page.views.append(view_to_add)
+            except Exception as e:
+                print(f"Erro ao carregar user_view: {e}")
 
-    page.add(lbl_content)
-    page.add(
-        ft.Column(fields)
-    )
-    if name.value or last_name.value or email.value:
-        lbl_status.value = "Tudo certo para salvar"
-        lbl_status.bgcolor = "green"
-        btn_adicionar.visible = True
-    
-    page.add(ft.Row())
-    page.add(lbl_status)
-    page.add(ft.Row())
-    page.add(ft.Row())
-    page.add(btn_adicionar)
+        page.update()
 
+    # eventos
+    page.on_route_change = route_change
+
+    route_change(page.route) 
 
 ft.app(target=main)
