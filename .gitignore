@@ -44,6 +44,7 @@ wheels/
 .env.*.local
 secrets.json
 *.pem
+.dotfiles
 
 # --- Jupyter Notebook ---
 .ipynb_checkpoints
